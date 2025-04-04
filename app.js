@@ -33,6 +33,18 @@ backspace.addEventListener("click", () => {
 	currentData.textContent = currentData.textContent.slice(0, -1);
 });
 
+document.addEventListener("keydown", function(event) {
+	const allowedKeys = ['0','1','2','3','4','5','6','7','8','9', '.',
+						 '+', '-', '*', '/', '%', '(', ')'];
+    if (allowedKeys.includes(event.key)){
+		currentData.textContent += event.key;
+    }
+	if (event.key === "Enter"){
+		console.log("Enter detected");
+		ftEqual();
+    }
+});
+
 numbers.forEach( number => {
 	number.addEventListener("click", () => {
 		const value = number.textContent;
@@ -42,14 +54,19 @@ numbers.forEach( number => {
 
 operators.forEach( operator => {
 	operator.addEventListener("click", () => {
+		if( !/[0-9.]$/.test(currentData.textContent)){
+			currentData.textContent = currentData.textContent.slice(0, -1);
+		}
 		const value = operator.textContent;
 		currentData.append(value);
 	});
 });
 
-equalBtn.addEventListener("click", () => {
-	let value = currentData.textContent;
-	const result = operate(value);
-	storeData.textContent = currentData.textContent;
-	currentData.textContent = result;
-});
+function ftEqual () {
+	let		value	=	currentData.textContent;
+	const	result	=	operate(value);
+	storeData.textContent	=	currentData.textContent;
+	currentData.textContent	= 	result;
+};
+
+equalBtn.addEventListener("click", ftEqual);
